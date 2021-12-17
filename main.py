@@ -12,7 +12,6 @@ writer.hideturtle()
 writer.penup()
 
 states_data = pandas.read_csv("50_states.csv")
-# print(states_data.state)
 
 score = 0
 correct_states = []
@@ -26,7 +25,6 @@ while score < 50:
         prompt_text = "Type another state's name:"
     answer_state = screen.textinput(title=prompt_title, prompt=prompt_text)
     if answer_state is None:
-        # print("Nope...")
         break
     if answer_state == "":
         continue
