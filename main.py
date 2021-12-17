@@ -25,7 +25,6 @@ while score < 50:
         prompt_title = f"{score}/50 States Correct"
         prompt_text = "Type another state's name:"
     answer_state = screen.textinput(title=prompt_title, prompt=prompt_text)
-    # print(f"--{answer_state}--")
     if answer_state is None:
         # print("Nope...")
         break
@@ -33,10 +32,10 @@ while score < 50:
         continue
     elif states_data.state.str.fullmatch(answer_state, case=False).any() \
             and answer_state.lower() not in (state.lower() for state in correct_states):
-        state_row = states_data[states_data.state.str.contains(answer_state, case=False, regex=False)]
-        state = state_row.iloc[0, 0]
-        x_coord = state_row.iloc[0, 1]
-        y_coord = state_row.iloc[0, 2]
+        state_row = states_data[states_data.state.str.fullmatch(answer_state, case=False)]
+        state = state_row.state.item()
+        x_coord = int(state_row.x)
+        y_coord = int(state_row.y)
         writer.goto(x_coord, y_coord)
         writer.write(state)
         score += 1
@@ -48,5 +47,7 @@ else:
     print(f"You guessed correctly {score} of 50 states:")
     for i in range(len(correct_states)):
         print(f"{i+1} {correct_states[i]}")
+    states_to_learn = states_data[~states_data.state.isin(correct_states)].state.reset_index(drop=True)
+    states_to_learn.to_csv("states_to_learn.csv")
 
 turtle.bye()
